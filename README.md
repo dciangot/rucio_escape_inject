@@ -6,7 +6,7 @@
 	- changes needed to the rucio client, in order to allow this through gfal https://github.com/rucio/rucio/issues/4072
 	- issue stil open but I put here the modified python source
 	- this will allow to insert into the datalake any data accessible with a grid certificate and cms opendata
-- to import data import and registration is here:
+	- to import data import and registration is here:
 ```
 source /cvmfs/cms.cern.ch/rucio/setup.sh
 export X509_USER_PROXY=/tmp/proxy
@@ -19,6 +19,8 @@ export NAME=/opendata/cms/Run2010B/Mu/AOD/Apr21ReReco-v1/0000/
 
 python register_dataset_RUCIO.py --source $SOURCE --name $NAME  opendata1 --account dciangot --scope CMS_INFN_DCIANGOT --destination DESY-DCACHE
 ```
+- created a rule for data replication to CNAF
+	- still in TODO: `Add replication rule based on attributes: rucio add-rule YOUREXPERIMENT_YOURINSTITUTION_YOURNAME:FILE_TO_BE_UPLOADED 1 QOS=FAST`
 
 ## Simple workflow exercise
 
