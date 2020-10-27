@@ -78,12 +78,14 @@ if __name__ == "__main__":
     inputs = zip(files, pfns_for_file)
 
     shutil.rmtree("/eos/user/d/dciangot/" + inputs[0][0]['scope'], ignore_errors=True)
+    shutil.rmtree("/eos/user/d/dciangot/escape_outputs", ignore_errors=True)
     to_download = [{'did': i[0]['scope']+":"+i[0]['name'], 'base_dir': "/eos/user/d/dciangot/"} for i in inputs]
     downloadCli.download_dids(to_download)
 
+    os.mkdir("/eos/user/d/dciangot/escape_outputs")
     import ROOT
     #/eos/user/d/dciangot/CMS_INFN_DCIANGOT/opendata__cms__Run2010B__Mu__AOD__Apr21ReReco-v1__0000__00459D48-EB70-E011-AF09-90E6BA19A252.root
-    for it in inputs[:1]:
+    for it in inputs:
         job_input = "/eos/user/d/dciangot/" + it[0]['scope'] + "/" + it[0]['name']
         fill = ROOT.TFile(job_input)
         fill2 = fill.Cp("/eos/user/d/dciangot/escape_outputs/output__"+it[0]['name'])
