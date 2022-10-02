@@ -67,7 +67,26 @@ def __download_geoip_db(directory, filename):
         file_object.close()
         tarfile_name = '%s/%s.tar.gz' % (directory, filename)
         with tarfile.open(name=tarfile_name, mode='r:gz') as tfile:
-            tfile.extractall(path=directory)
+            def is_within_directory(directory, target):
+                
+                abs_directory = os.path.abspath(directory)
+                abs_target = os.path.abspath(target)
+            
+                prefix = os.path.commonprefix([abs_directory, abs_target])
+                
+                return prefix == abs_directory
+            
+            def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+            
+                for member in tar.getmembers():
+                    member_path = os.path.join(path, member.name)
+                    if not is_within_directory(path, member_path):
+                        raise Exception("Attempted Path Traversal in Tar File")
+            
+                tar.extractall(path, members, numeric_owner) 
+                
+            
+            safe_extract(tfile, path=directory)
             for entry in tfile:
                 if entry.name.find('%s.mmdb' % filename) > -1:
                     print('Will move %s/%s to %s/%s' % (directory, entry.name, directory, entry.name.split('/')[-1]))
